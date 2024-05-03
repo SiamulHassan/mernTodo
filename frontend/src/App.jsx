@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 function App() {
@@ -7,6 +7,8 @@ function App() {
       <Routes>
         {/* <Route path="/emailVerify/:token" element={<EmailVerify />} />
         <Route path="/optVerify/:email" element={<OptVerify />} /> */}
+        <Route index element={<Navigate replace to="/registration" />} />
+
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         {/* <Route path="/dashboard" element={<Dashboard />}>

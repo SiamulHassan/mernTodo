@@ -8,6 +8,7 @@ const app = express();
 dbConnection();
 app.use(cors());
 app.use(express.json());
+app.use("/images", express.static("images"));
 app.use("/", router);
 
 const port = process.env.PORT || 8000;
