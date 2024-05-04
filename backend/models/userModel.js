@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
   imgUrl: {
     type: String,
   },
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
 });
 const User = mongoose.model("User", userSchema);
 module.exports = User;

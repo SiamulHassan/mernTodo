@@ -6,16 +6,20 @@ import { useState } from "react";
 const Registration = () => {
   const [imgDataFile, setImgDataFile] = useState(null);
   const onFinish = async (values) => {
-    const modified = {
+    let modified = {
       ...values,
       myAvatar: imgDataFile,
     };
-    const formData = new FormData();
+    let formData = new FormData();
     Object.keys(modified).forEach((key) => {
       formData.append(key, modified[key]);
     });
 
-    await axios.post("http://localhost:8000/api/v1/registration", formData);
+    const data2 = await axios.post(
+      "http://localhost:8000/api/v1/registration",
+      formData
+    );
+    console.log("data2", data2);
   };
 
   const handleChange = (e) => {

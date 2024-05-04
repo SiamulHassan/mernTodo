@@ -5,8 +5,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/emailVerify/:token" element={<EmailVerify />} />
-        <Route path="/optVerify/:email" element={<OptVerify />} /> */}
+        {/* <Route path="/emailVerify/:token" element={<EmailVerify />} /> */}
         <Route index element={<Navigate replace to="/registration" />} />
 
         <Route path="/registration" element={<Registration />} />
