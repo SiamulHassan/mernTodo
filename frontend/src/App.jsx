@@ -5,16 +5,38 @@ import EmailVerify from "./pages/EmailVerify";
 import Todo from "./pages/Todo";
 import { useSelector } from "react-redux";
 function App() {
-  const userInfo = useSelector((val) => val.login.value);
+  const user = useSelector((val) => val.login.value);
 
   return (
     <BrowserRouter>
       <Routes>
-        {userInfo?.email && <Route path="/todo" element={<Todo />} />}
-        <Route index element={<Navigate replace to="/registration" />} />
+        {/* if usr -> /registration will be replaced */}
+        {user?.email ? (
+          <Route
+            path="/registration"
+            element={<Navigate replace to="/todo" />}
+          />
+        ) : (
+          // if not usr -> registration is accessible
+          <Route path="/registration" element={<Registration />} />
+        )}
+        {/* usr ? --> login will be replaced */}
+        {user?.email ? (
+          <Route path="/login" element={<Navigate replace to="/todo" />} />
+        ) : (
+          // if not usr -> login is accessible
+          <Route path="/login" element={<Login />} />
+        )}
+
+        {/* usr ? --> todo is accessible*/}
+        {user?.email ? (
+          <Route path="/todo" element={<Todo />} />
+        ) : (
+          // if not usr and u r todo page -> todo is replaceable
+          <Route path="/todo" element={<Navigate replace to="/login" />} />
+        )}
+        <Route path="/" element={<Navigate replace to="/registration" />} />
         <Route path="/emailVerify/:token" element={<EmailVerify />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

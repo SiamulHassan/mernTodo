@@ -59,6 +59,7 @@ const Todo = () => {
   // dete todo
   const handleDelete = async (id) => {
     await axios.delete(`http://localhost:8000/api/v1/todo/${id}`);
+
     api.open({
       message: "todo deleted",
       duration: 0,
