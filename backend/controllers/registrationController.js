@@ -9,7 +9,13 @@ const registrationController = async (req, res) => {
     let { username, email, password, passwordConfirm } = req.body;
 
     // // empty fields
-    if (username === "") throw new Error("All field is required !");
+    if (
+      username === "" ||
+      email === "" ||
+      password === "" ||
+      passwordConfirm === ""
+    )
+      throw new Error("All field is required !");
     // // pass and confirm pass
     if (password !== passwordConfirm)
       throw new Error("Password and Confirm password should be similar");

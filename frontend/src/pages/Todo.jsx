@@ -5,31 +5,28 @@ import {
   Form,
   Input,
   notification,
-  Avatar,
   Divider,
   Checkbox,
 } from "antd";
 import axios from "axios";
-import { BiTask } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Img from "../component/Img";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Header from "../component/Header";
 const Todo = () => {
   const [showtodos, setShowTodos] = useState([]);
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
-
+  const user = useSelector((val) => val.login.value);
   // filtering todos
   const completedTodos = showtodos?.filter((todos) => todos.isChecked === true);
   const unFinishedTodos = showtodos?.filter(
     (todos) => todos.isChecked === false
   );
-
+  // create todo
   const onFinish = async (values) => {
-    console.log(values);
-
     await axios.post("http://localhost:8000/api/v1/todo", values);
-
     api.open({
       message: "Item submitted",
       duration: 0,
@@ -73,19 +70,11 @@ const Todo = () => {
         }}
       >
         <Img />
-        <div className="text-center">
-          <Avatar
-            style={{
-              backgroundColor: "#E1A0FF",
-              color: "#fff",
-            }}
-            size={64}
-            icon={<BiTask />}
-          />
-          <h2 className="text-[30px] font-bold text-[#444]">List of Task</h2>
-          <p className="text-[14px] text-[#BEBEBE]">Do what you want</p>
-          <Divider />
-        </div>
+        <p className="font-bold text-[#444] text-[20px] text-right">
+          {user.userName}
+        </p>
+
+        <Header />
         <div>
           <Form
             form={form}

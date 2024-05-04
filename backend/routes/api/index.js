@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const apiRouter = express.Router();
+// controllers
 const registrationController = require("../../controllers/registrationController");
 const emailVerifyController = require("../../controllers/emailVarifyController");
 const loginController = require("../../controllers/loginController");
@@ -8,6 +9,7 @@ const todoController = require("../../controllers/todoController");
 const getTodoController = require("../../controllers/getTodoController");
 const patchTodoController = require("../../controllers/patchTodoController");
 const deleteTodoController = require("../../controllers/deleteTodoController");
+
 // multer image upload starts
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,6 +30,7 @@ apiRouter.post(
   upload.single("myAvatar"),
   registrationController
 );
+
 apiRouter.post("/emailVerify", emailVerifyController);
 
 apiRouter.post("/login", loginController);

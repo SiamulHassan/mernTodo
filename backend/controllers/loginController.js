@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-
+//Pa$$w0rd!
 const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -18,6 +18,7 @@ const loginController = async (req, res) => {
             email,
             imgUrl: loggedUser.imgUrl,
             result: result,
+            userName: loggedUser.username,
           });
         }
       });

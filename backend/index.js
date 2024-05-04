@@ -3,7 +3,6 @@ const express = require("express");
 const router = require("./routes");
 const dbConnection = require("./config/mongoDbConfig");
 const cors = require("cors");
-
 const app = express();
 dbConnection();
 app.use(cors());
