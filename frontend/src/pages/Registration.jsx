@@ -1,10 +1,10 @@
 // import React from 'react'
-import { Button, Card, Form, Input } from "antd";
-// import { useState } from "react";
+import { Button, Card, Form, Input, notification } from "antd";
 import axios from "axios";
 import { useState } from "react";
 const Registration = () => {
   const [imgDataFile, setImgDataFile] = useState(null);
+  const [api, contextHolder] = notification.useNotification();
   const onFinish = async (values) => {
     let modified = {
       ...values,
@@ -15,11 +15,12 @@ const Registration = () => {
       formData.append(key, modified[key]);
     });
 
-    const data2 = await axios.post(
-      "http://localhost:8000/api/v1/registration",
-      formData
-    );
-    console.log("data2", data2);
+    await axios.post("http://localhost:8000/api/v1/registration", formData);
+
+    api.open({
+      message: "Registration successfull , please verify !",
+      duration: 0,
+    });
   };
 
   const handleChange = (e) => {
@@ -43,6 +44,7 @@ const Registration = () => {
             span: 7,
           }}
         >
+          {contextHolder}
           <Form.Item label="Upload" name="myAvatar">
             <Input type="file" onChange={(e) => handleChange(e)} />
           </Form.Item>
@@ -95,7 +97,7 @@ const Registration = () => {
               },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item
