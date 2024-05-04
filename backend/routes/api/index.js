@@ -3,6 +3,11 @@ const multer = require("multer");
 const apiRouter = express.Router();
 const registrationController = require("../../controllers/registrationController");
 const emailVerifyController = require("../../controllers/emailVarifyController");
+const loginController = require("../../controllers/loginController");
+const todoController = require("../../controllers/todoController");
+const getTodoController = require("../../controllers/getTodoController");
+const patchTodoController = require("../../controllers/patchTodoController");
+const deleteTodoController = require("../../controllers/deleteTodoController");
 // multer image upload starts
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -24,4 +29,15 @@ apiRouter.post(
   registrationController
 );
 apiRouter.post("/emailVerify", emailVerifyController);
+
+apiRouter.post("/login", loginController);
+// todo post
+apiRouter.post("/todo", todoController);
+// get todo
+apiRouter.get("/todo", getTodoController);
+// update todo
+apiRouter.patch("/todo", patchTodoController);
+//todo delete
+apiRouter.delete("/todo/:id", deleteTodoController);
+
 module.exports = apiRouter;

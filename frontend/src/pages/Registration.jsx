@@ -112,9 +112,6 @@ const Registration = () => {
           </Form.Item>
         </Form>
       </Card>
-      {/* <Flex justify="center" align="center" className="bg-blue-100 ">
-    
-      </Flex> */}
     </div>
   );
 };
