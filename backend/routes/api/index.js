@@ -9,6 +9,7 @@ const todoController = require("../../controllers/todoController");
 const getTodoController = require("../../controllers/getTodoController");
 const patchTodoController = require("../../controllers/patchTodoController");
 const deleteTodoController = require("../../controllers/deleteTodoController");
+const editTodoController = require("../../controllers/editTodoController");
 
 // multer image upload starts
 const storage = multer.diskStorage({
@@ -38,8 +39,10 @@ apiRouter.post("/login", loginController);
 apiRouter.post("/todo", todoController);
 // get todo
 apiRouter.get("/todo", getTodoController);
-// update todo
+// update todo status
 apiRouter.patch("/todo", patchTodoController);
+// edit todo
+apiRouter.patch("/todo/editTodo", editTodoController);
 //todo delete
 apiRouter.delete("/todo/:id", deleteTodoController);
 

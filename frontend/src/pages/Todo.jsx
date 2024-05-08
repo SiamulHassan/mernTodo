@@ -8,12 +8,15 @@ import {
   Divider,
   Checkbox,
 } from "antd";
+import { DragDropContext } from "react-beautiful-dnd";
 import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import Img from "../component/Img";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
+import ModalForm from "../component/ModalForm";
+
 const Todo = () => {
   const [showtodos, setShowTodos] = useState([]);
   const [form] = Form.useForm();
@@ -33,7 +36,7 @@ const Todo = () => {
     });
     form.resetFields();
   };
-  // update todo
+  // update todo status
   const onChange = async (id, e) => {
     if (e.target.checked) {
       await axios.patch("http://localhost:8000/api/v1/todo", {
@@ -53,6 +56,7 @@ const Todo = () => {
     }
     getTodos();
   }, []);
+
   // dete todo
   const handleDelete = async (id) => {
     await axios.delete(`http://localhost:8000/api/v1/todo/${id}`);
@@ -61,6 +65,36 @@ const Todo = () => {
       message: "todo deleted",
       duration: 0,
     });
+  };
+  /// dnd
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+    if (!destination) return;
+    if (source.droppableId !== destination.droppableId) {
+      const newData = [...JSON.parse(JSON.stringify(showtodos))];
+      const oldDroppableIndex = newData.findIndex(
+        (x) => x.id == source.droppableId
+      );
+      const newDroppableIndex = newData.findIndex(
+        (x) => x.id == destination.droppableId
+      );
+      const [item] = newData[oldDroppableIndex].tasks.splice(source.index, 1);
+      newData[newDroppableIndex].tasks.splice(destination.index, 0, item);
+
+      showtodos([...newData]);
+      //local storage saving
+      localStorage.setItem("dragData", JSON.stringify([...newData]));
+    } else {
+      const newData = [...JSON.parse(JSON.stringify(showtodos))]; //shallow copy concept
+      const droppableIndex = newData.findIndex(
+        (x) => x.id == source.droppableId
+      );
+      const [item] = newData[droppableIndex].tasks.splice(source.index, 1);
+      newData[droppableIndex].tasks.splice(destination.index, 0, item);
+      showtodos([...newData]);
+      //local storage saving
+      localStorage.setItem("dragData", JSON.stringify([...newData]));
+    }
   };
   return (
     <div className="min-h-screen flex justify-center items-center">
@@ -130,24 +164,43 @@ const Todo = () => {
             </Form.Item>
           </Form>
         </div>
-        <div className="show-all-todo mt-16">
-          {unFinishedTodos?.map((todo) => (
-            <div className="item-checkbox" key={todo._id}>
-              <div className="flex gap-4 items-center">
-                <Checkbox onChange={(e) => onChange(todo._id, e)}></Checkbox>
-                <div>
-                  <h2 className="font-bold text-[15px]">{todo.itemName}</h2>
-                  <p>{todo.itemDetails}</p>
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="show-all-todo mt-16">
+            <h2 className="font-bold text-[15px]">In Progress</h2>
+          </div>
+          <div className="show-all-todo mt-16">
+            <h2 className="font-bold text-[15px] mb-5">Todo</h2>
+            {unFinishedTodos?.map((todo) => (
+              <div className="item-checkbox" key={todo._id}>
+                <div className="flex gap-4 items-center justify-between">
+                  <div className="flex gap-4">
+                    <Checkbox
+                      onChange={(e) => onChange(todo._id, e)}
+                    ></Checkbox>
+                    <div>
+                      <h2 className="font-bold text-[15px]">{todo.itemName}</h2>
+                      <p>{todo.itemDetails}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <MdDelete
+                      onClick={() => handleDelete(todo._id)}
+                      className="text-[25px] ml-auto text-[#f07272] cursor-pointer"
+                    />
+                    <ModalForm
+                      editId={todo._id}
+                      editItemName={todo.itemName}
+                      editItemDetails={todo.itemDetails}
+                    />
+                  </div>
                 </div>
-                <MdDelete
-                  onClick={() => handleDelete(todo._id)}
-                  className="text-[25px] ml-auto text-[#f07272] cursor-pointer"
-                />
+                <Divider className="my-[10px]" />
               </div>
-              <Divider className="my-[10px]" />
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </DragDropContext>
+
         <div className="show-completed-todo">
           <h2 className="font-bold text-[29px] text-center mt-10 mb-4">
             Completed Task
