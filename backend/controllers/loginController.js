@@ -6,13 +6,20 @@ const loginController = async (req, res) => {
     const { email, password } = req.body;
 
     const loggedUser = await User.findOne({ email });
-    console.log(loggedUser.imgUrl);
-    if (loggedUser.length < 0) {
-      throw new Error("No user found");
+    if (!loggedUser) {
+      res.status(400).json({
+        status: "faild",
+        message: '"No user found"',
+      });
+      // throw new Error();
     } else {
       bcrypt.compare(password, loggedUser.password, function (err, result) {
-        if (err) throw new Error(err.message);
-        if (result) {
+        if (!result) {
+          res.status(400).json({
+            status: "faild",
+            message: "Email or Password not matched !",
+          });
+        } else {
           res.status(200).json({
             status: "success",
             email,
@@ -25,6 +32,7 @@ const loginController = async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({
+      status: "faild",
       message: error.message,
     });
   }

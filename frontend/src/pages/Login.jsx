@@ -9,22 +9,25 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const onFinish = async (values) => {
-    const { data } = await axios.post(
-      "http://localhost:8000/api/v1/login",
-      values
-    );
-    //Pa$$w0rd!
-    if (data.result) {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/api/v1/login",
+        values
+      );
+      //Pa$$w0rd!
+      if (data.result) {
+        localStorage.setItem("todoUser", JSON.stringify(data));
+        dispatch(loggedInUser(data));
+      }
+      setTimeout(() => {
+        navigate("/todo");
+      }, 1000);
+    } catch (error) {
       api.open({
-        message: "Registration successfull , please verify !",
+        message: error.response.data.message,
         duration: 0,
       });
-      localStorage.setItem("todoUser", JSON.stringify(data));
-      dispatch(loggedInUser(data));
     }
-    setTimeout(() => {
-      navigate("/todo");
-    }, 1000);
   };
   return (
     <div className="min-h-screen flex justify-center items-center">

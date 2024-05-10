@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import EmailVerify from "./pages/EmailVerify";
 import Todo from "./pages/Todo";
 import { useSelector } from "react-redux";
+import ManageTodo from "./pages/ManageTodo";
 function App() {
   const user = useSelector((val) => val.login.value);
 
@@ -30,7 +31,10 @@ function App() {
 
         {/* usr ? --> todo is accessible*/}
         {user?.email ? (
-          <Route path="/todo" element={<Todo />} />
+          <>
+            <Route path="/todo" element={<Todo />} />
+            <Route path="/manage-todo" element={<ManageTodo />} />
+          </>
         ) : (
           // if not usr and u r todo page -> todo is replaceable
           <Route path="/todo" element={<Navigate replace to="/login" />} />
